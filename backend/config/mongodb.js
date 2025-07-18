@@ -1,4 +1,5 @@
 
+
 import mongoose from 'mongoose'
 
 const connetDB = async () => {
@@ -7,23 +8,15 @@ const connetDB = async () => {
     mongoose.connection.on('error', (err) => console.error('MongoDB connection error:', err))
     mongoose.connection.on('disconnected', () => console.log('Database Disconnected!'))
 
-    // Handle different MongoDB URI formats
     let mongoURI = process.env.MONGODB_URI
-    
+
     if (!mongoURI) {
       throw new Error('MONGODB_URI environment variable is not set')
-    }
-    
-    // If URI doesn't end with database name, append it
-    if (!mongoURI.includes('/prescripto')) {
-      // Remove trailing slash if present
-      mongoURI = mongoURI.replace(/\/$/, '')
-      mongoURI = `${mongoURI}/prescripto`
     }
 
     console.log('Attempting to connect to MongoDB...')
     console.log('MongoDB URI format check:', mongoURI.startsWith('mongodb://') || mongoURI.startsWith('mongodb+srv://') ? 'Valid' : 'Invalid')
-    
+
     await mongoose.connect(mongoURI)
   } catch (error) {
     console.error('Failed to connect to MongoDB:', error.message)
